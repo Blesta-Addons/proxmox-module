@@ -1,0 +1,11 @@
+
+	<div class="pad">
+	
+		<div class="title_row first">
+			<h3><?php $this->_("Proxmoxv2.tab_console.heading_console");?></h3>
+		</div>
+	
+		<div class="empty_section">
+			<div class="empty_box"><?php $this->_("Proxmoxv2.not.available");?></div>
+		</div>
+	</div>

@@ -1,0 +1,15 @@
+
+	<div class="pad">
+		<?php
+		$graph_keys = array("mem,maxmem", "cpu", "netin,netout", "diskread,diskwrite");
+		foreach ($graph_keys as $value) {
+		?>
+		<div class="title_row first">
+			<h3><?php $this->_("Proxmoxv2.tab_stats.stats") .  $this->Html->_($value) ;?></h3>
+		</div>		
+	
+		<p><img src="data:image/png;base64,<?php $this->Html->_($images[$value]); ?>" /></p>
+		<?php
+		}
+		?>
+	</div>

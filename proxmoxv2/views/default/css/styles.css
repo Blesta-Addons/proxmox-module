@@ -1,0 +1,174 @@
+
+.common_box .links_row a.return span{background:url(../../../../../../vendors/fugue_icons/arrow-180.png) no-repeat 0 50%;}
+
+.options {margin-top:15px;}
+.options a { padding-left:24px; margin-right:24px; font-weight:bold;}
+	.options a.boot { background:url("../../../../../../vendors/fugue_icons/control-power.png") no-repeat 0 50%;}
+	.options a.reboot { background:url("../../../../../../vendors/fugue_icons/arrow-circle-double.png") no-repeat 0 50%;}
+	.options a.shutdown { background:url("../../../../../../vendors/fugue_icons/control-power.png") no-repeat 0 50%;}
+	.options a.reinstall { background:url("../../../../../../vendors/fugue_icons/drive--exclamation.png") no-repeat 0 50%;}
+	.options a.mount_iso { background:url("../../../../../../vendors/fugue_icons/disc--plus.png") no-repeat 0 50%;}
+	.options a.unmount_iso { background:url("../../../../../../vendors/fugue_icons/disc--minus.png") no-repeat 0 50%;}
+	.options a.hostname { background:url("../../../../../../vendors/fugue_icons/ui-text-field.png") no-repeat 0 50%;}
+	.options a.password { background:url("../../../../../../vendors/fugue_icons/ui-text-field-password-red.png") no-repeat 0 50%;}
+
+.options span.running { background-color:#8dc248; color:#fff;}
+.options span.stopped { background-color:#ca3334; color:#fff;}
+.options span.disabled { background-color:#444; color:#fff;}
+
+.options .actions {float:left; margin-right:10px; background-color:#f9f9f9; padding:8px; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+
+applet { border:1px solid #e9e9e9; margin-top:15px;}
+
+
+/** admin side **/
+
+
+#proxmox form {width: auto;}
+#proxmox li {margin-bottom: 10px;padding: 10px 0 !important;border-radius: 5px;width: 100%;}
+#proxmox li.dark{background-color: #f1f1f1;}
+#proxmox li.gray{background-color: #f8f8f8;}
+#proxmox li.highlight{background-color: #ECF7FF;}
+#proxmox li  span{padding: 0px;margin-left: 10px;display: inline-block;}
+#proxmox li  label{text-align: right;width: 150px;display: inline-block;}
+
+#proxmox span.status {padding:2px 6px 2px 20px !important ;background-position:0px 1px; background-repeat:no-repeat; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+#proxmox span.running { background:url("../../../../../../vendors/fugue_icons/light-bulb.png") no-repeat 0 50% #8dc248;}
+#proxmox span.stopped { background:url("../../../../../../vendors/fugue_icons/light-bulb-off.png") no-repeat 0 50% #ca3334;}
+
+#proxmox a {padding:2px 6px 2px 20px; background-position:0px 1px; background-repeat:no-repeat;}
+#proxmox a.reboot {background:url("../../../../../../vendors/fugue_icons/arrow-circle-315.png") no-repeat 0 50%;}
+#proxmox a.shutdown { background:url("../../../../../../vendors/fugue_icons/control-power.png") no-repeat 0 50%;}
+#proxmox a.stop {background:url("../../../../../../vendors/fugue_icons/plug-disconnect-slash.png") no-repeat 0 50%;}
+#proxmox a.refresh {background:url("../../../../../../vendors/fugue_icons/arrow-circle-double.png") no-repeat 0 50%;padding: 20px;}
+
+#proxmox .btn_right  {cursor:pointer;margin: 0px 0px -5px 5px;padding: 0px 10px 0px 25px;border-radius: 15px;box-shadow: 0px 1px 5px #D8D8D8;line-height: 20px;border: 1px solid #C5C5C5;background: url("../images/btn_bg02.gif") repeat-x scroll 0px 0px #EEEEEE;font-size: 10px;font-weight: bold;color: #6E6E6E;text-transform: uppercase;}
+#proxmox .refresh {background:url("../../../../../../vendors/fugue_icons/arrow-circle-double.png") no-repeat 8px 50%;padding: 20px;}
+#proxmox .reboot {background:url("../../../../../../vendors/fugue_icons/arrow-circle-315.png") no-repeat 8px 50%  #EEEEEE ;}
+#proxmox .shutdown { background:url("../../../../../../vendors/fugue_icons/control-power.png") no-repeat 8px 50%  #EEEEEE;}
+#proxmox .stop {background:url("../../../../../../vendors/fugue_icons/plug-disconnect-slash.png") no-repeat 8px 50%  #EEEEEE;}
+#proxmox .start {background:url("../../../../../../vendors/fugue_icons/control.png") no-repeat 8px 50%  #EEEEEE;}
+#proxmox .config {background:url("../../../../../../vendors/fugue_icons/gear.png") no-repeat 8px 50%  #EEEEEE;}
+#proxmox .password {background:url("../../../../../../vendors/fugue_icons/ui-text-field-password-red.png") no-repeat 8px 50%  #EEEEEE;}
+#proxmox .hostname {background:url("../../../../../../vendors/fugue_icons/server--pencil.png") no-repeat 8px 50%  #EEEEEE;}
+
+#proxmox a.poweroff {background:url("../../../../../../vendors/fugue_icons/control-power.png") no-repeat 0 50%;}
+#proxmox a.poweron {background:url("../../../../../../vendors/fugue_icons/control.png") no-repeat 0 50%;}
+
+
+.cd-user-modal form {float: none;width: auto;}
+.cd-user-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(52, 54, 66, 0.9);
+  z-index: 3;
+  overflow-y: auto;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s 0, visibility 0 0.3s;
+  -moz-transition: opacity 0.3s 0, visibility 0 0.3s;
+  transition: opacity 0.3s 0, visibility 0 0.3s;
+}
+.cd-user-modal.is-visible {
+  visibility: visible;
+  position: absolute;
+  opacity: 1;
+  -webkit-transition: opacity 0.3s 0, visibility 0 0;
+  -moz-transition: opacity 0.3s 0, visibility 0 0;
+  transition: opacity 0.3s 0, visibility 0 0;
+}
+.cd-user-modal.is-visible .cd-user-modal-container {
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -ms-transform: translateY(0);
+  -o-transform: translateY(0);
+  transform: translateY(0);
+}
+.cd-user-modal-container {
+  position: relative;
+  width: 90%;
+  max-width: 600px;
+  background: #fff;
+  margin: 3em auto 4em;
+  cursor: auto;
+  border-radius: 0.25em;
+  -webkit-transform: translateY(-30px);
+  -moz-transform: translateY(-30px);
+  -ms-transform: translateY(-30px);
+  -o-transform: translateY(-30px);
+  transform: translateY(-30px);
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  margin: 4em auto;
+}
+
+.cd-form {padding: 2em;width: auto;float: none;}
+.cd-close-form {
+  /* form X button on top right */
+  display: block;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  right: 0;
+  top: -40px;
+  background: url("http://codyhouse.co/demo/login-signup-modal-window/img/cd-icon-close.svg") no-repeat center center;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+#popupmodal .cd-form .fieldset {position: relative;margin: 1.4em 0;border: 0px;padding: 0px;}
+#popupmodal .cd-form .fieldset:first-child {margin-top: 0;}
+#popupmodal .cd-form .fieldset:last-child {margin-bottom: 0;}
+#popupmodal .cd-form label {font-size: 14px;font-size: 0.875rem;} 
+
+#popupmodal .cd-form input {margin: 0;padding: 0;border-radius: 0.25em;}
+#popupmodal .cd-form input.full-width {width: 90%;}
+#popupmodal .cd-form input.has-padding {padding: 12px 10px;}
+#popupmodal .cd-form input.has-border {border: 1px solid #d2d8d8;-webkit-appearance: none;-moz-appearance: none;-ms-appearance: none;-o-appearance: none;appearance: none;}
+#popupmodal .cd-form input.has-border:focus {border-color: #343642;box-shadow: 0 0 5px rgba(52, 54, 66, 0.1);outline: none;}
+#popupmodal .cd-form input.has-error {border: 1px solid #d76666;}
+
+#popupmodal .cd-form input.cd-hostname {background: url("../../../../../../vendors/fugue_icons/server--pencil.png") no-repeat scroll right 7px;}
+#popupmodal .cd-form input.cd-password {background: url("../../../../../../vendors/fugue_icons/key--pencil.png") no-repeat scroll right 7px;}
+#popupmodal .cd-form input.cd-memory {background: url("../../../../../../vendors/fugue_icons/memory.png") no-repeat scroll right 7px;}
+#popupmodal .cd-form input.cd-cpu {background: url("../../../../../../vendors/fugue_icons/sockets.png") no-repeat scroll right 7px;}
+#popupmodal .cd-form input.cd-hdd {background: url("../../../../../../vendors/fugue_icons/database.png") no-repeat scroll right 7px;}
+#popupmodal .cd-form input.cd-ip {background: url("../../../../../../vendors/fugue_icons/network-ethernet.png") no-repeat scroll right 7px;}
+
+
+#popupmodal .cd-form input[type=password] {padding-right: 65px;}
+#popupmodal .cd-form input[type=submit] {padding: 16px 0;cursor: pointer;background: #2f889a;color: #FFF;font-weight: bold;border: none;-webkit-appearance: none;-moz-appearance: none;-ms-appearance: none;-o-appearance: none;appearance: none;}
+#popupmodal .no-touch .cd-form input[type=submit]:hover, .no-touch .cd-form input[type=submit]:focus {background: #3599ae;outline: none;}
+#hostname, #settings, #password {display: none;}
+#hostname.is-selected, #settings.is-selected, #password.is-selected {display: block;}
+
+#popupmodal .cd-form label.image-replace {
+  /* replace text with an icon */
+  display: inline-block;
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  bottom: auto;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+  color: transparent;
+  text-shadow: none;
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+}

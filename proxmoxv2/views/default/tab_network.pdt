@@ -1,0 +1,40 @@
+	<?php
+	echo $this->Html->ifSet($message);
+	?>
+	
+	<div class="pad">
+	
+		<div class="title_row first">
+			<h3><?php $this->_("Proxmoxv2.tab_config.heading_config");?></h3>
+		</div>
+	
+		<div class="options">
+		<?php	$this->Form->create(null, array('id'=>"network")); ?>
+		
+			<ul id="proxmox" class="main-nav">
+				<?php				
+				foreach ($settings as $i => $key) {
+				?>
+				<li class="highlight" >
+					<?php $this->Form->label($this->Html->ifSet($i) ." :" , $i );?>
+					<span><?php $this->Form->fieldText($i, $this->Html->ifSet($key), array('class' => ""));?></span>
+				</li>				
+				<?php
+				}
+				?>
+			</ul>
+			<div class="button_row">
+				<a class="btn_right submit" href="#" ><?php $this->_("Proxmoxv2.button.save");?></a>
+			</div>			
+		
+		<?php	$this->Form->end();	?>			
+		</div>	
+	</div>
+	
+		
+	
+<script type="text/javascript">
+$(document).ready(function() {
+	$(this).blestaSetHeadTag("link", {media:"screen", type:"text/css", rel:"stylesheet", href: "<?php echo $this->Html->safe($this->view_dir . "css/styles.css");?>"});
+});
+</script>

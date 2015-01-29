@@ -1,0 +1,45 @@
+	<?php
+	if ($this->Html->ifSet($tasks, false) && $tasks > 0) {
+	?>	
+	<div class="table-responsive">
+		<table class="table table-curved table-striped">
+			<thead>
+				<tr>
+					<th><?php $this->_("Proxmoxv2.tab_tasks.pid");?></th>
+					<th><?php $this->_("Proxmoxv2.tab_tasks.type");?></th>						
+					<th><?php $this->_("Proxmoxv2.tab_tasks.starttime");?></th>
+					<th><?php $this->_("Proxmoxv2.tab_tasks.endtime");?></th>					
+					<th><?php $this->_("Proxmoxv2.tab_tasks.status");?></th>
+				</tr>
+			</thead>	
+			<tbody>
+				<?php
+				for ($i=0; $i<count($tasks); $i++) {
+				?>
+				<tr>				
+					<td><?php $this->Html->_($tasks[$i]['pid']);?></td>
+					<td><?php $this->Html->_($tasks[$i]['type']);?></td>
+					<td><?php echo $this->Date->cast($this->Html->ifSet($tasks[$i]['starttime']) , "date_time") ;?></td>
+					<td><?php echo $this->Date->cast($this->Html->ifSet($tasks[$i]['endtime']) , "date_time") ;?></td>					
+					<td><?php $this->Html->_($tasks[$i]['status']);?></td>
+				</tr>
+				<?php
+				}
+				?>
+			</tbody>
+		</table>
+	</div>
+	<?php
+	}
+	else {
+	?>
+	<div class="alert alert-info">
+		<p><?php $this->_("ClientTickets.index.no_results");?></p>
+	</div>
+	<?php
+	}
+
+	if ($this->Pagination->hasPages()) {
+		$this->Pagination->build();
+	}
+	?>

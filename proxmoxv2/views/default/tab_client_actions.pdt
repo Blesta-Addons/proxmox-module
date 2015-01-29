@@ -1,0 +1,192 @@
+	<?php
+	echo $this->Html->ifSet($message);	
+	
+	function bytes($a) {
+		$unim = array("B","KB","MB","GB","TB","PB");
+		$c = 0;
+		while ($a>=1024) {
+			$c++;
+			$a = $a/1024;
+		}
+		return number_format($a,($c ? 2 : 0),",",".")." ".$unim[$c];
+	}	
+	
+	$cpusage = ($server['cpu']*100);
+	$freehdd = $server['maxdisk'] - $server['disk'] ;
+	$usedhdd = ($server['disk'] / $server['maxdisk'])* 100  ;	
+
+	$freemem = $server['maxmem'] - $server['mem'] ;
+	$usedmem = ($server['mem'] / $server['maxmem'])* 100  ;
+
+	?>
+	<div id="proxmox" >
+		
+		<h4><?php $this->_("Proxmoxv2.tab_actions.server_status");?> <span class="status <?php echo ($this->Html->ifSet($server['running'])  ? $this->_("Proxmoxv2.tab_actions.status_running") : $this->_("Proxmoxv2.tab_actions.status_stopped") );?>"> <?php echo ($this->Html->ifSet($server['running']) ? $this->_("Proxmoxv2.tab_actions.status_online") . " - " . $this->Html->ifSet($server['status']) : ($this->Html->ifSet($server['stopped']) ? $this->_("Proxmoxv2.tab_actions.status_offline") : $this->_("Proxmoxv2.tab_actions.status_online")));?></span>	</h4>
+
+		<div class="row options" >
+			<div class="col-md-6">
+			<?php
+			$this->Form->create(null, array('id'=>"action"));
+			if ($this->Html->ifSet($server['running'])) {
+			?>			
+				<button type="submit" name="action" class="btn btn-lg btn-success" value="reboot">
+					<i class="fa fa-refresh fa-spin"></i> <?php $this->_("Proxmoxv2.tab_actions.actions.reboot");?>
+				</button>	
+				<button type="submit" name="action" class="btn btn-lg btn-danger " value="shutdown">
+					<i class="fa fa-unlink"></i>  <?php $this->_("Proxmoxv2.tab_actions.actions.shutdown");?>
+				</button>					
+				<button type="submit" name="action" class="btn btn-lg btn-danger " value="stop">
+					<i class="fa fa-power-off"></i> <?php $this->_("Proxmoxv2.tab_actions.actions.stop");?>
+				</button>				
+			<?php
+			}
+			elseif ($server['stopped']) {
+			?>
+				<button type="submit" name="action" class="btn btn-lg btn-primary " value="start">
+					<i class="fa fa-play"></i> <?php $this->_("Proxmoxv2.tab_actions.actions.start");?>
+				</button>
+			<?php
+			}
+			$this->Form->end();
+			?>
+			</div>
+			<?php
+			if ($type = "openvz") {
+			?>
+			<div class="col-md-3">
+				<button type="submit" name="hostname" class="btn btn-default btn-lg hostname_btn" data-toggle="modal" data-target="#myModal">
+					<i class="fa fa-pencil"></i> <?php $this->_("Proxmoxv2.tab_actions.actions.change_hostname");?>
+				</button>
+			</div>	
+			<div class="col-md-3">	
+				<button type="submit" name="password" class="btn btn-default btn-lg password_btn" data-toggle="modal" data-target="#myModal">
+					<i class="fa fa-key"></i> <?php $this->_("Proxmoxv2.tab_actions.actions.change_password");?>
+				</button>
+			</div>	
+			<?php
+			}						
+			?>
+		</div>
+		
+		<div class="clearfix"></div>
+		
+		<div class="options">
+			<ul id="proxmox" class="main-nav">
+				<li class="highlight">
+					<label><?php $this->_("Proxmoxv2.tab_actions.hostname");?> :</label>
+					<span ><?php echo $server['name'];?></span> 
+				</li>
+				<li class="gray">
+					<label><?php $this->_("Proxmoxv2.tab_actions.ip_address");?> :</label>
+					<span ><?php echo $server['ip'];?></span>
+				</li>		
+				<li  class="highlight" >
+					<label><?php $this->_("Proxmoxv2.tab_actions.uptime");?> :</label>
+					<span ><?php echo $server['uptime'] ;?></span>	
+				</li>
+				<li class="gray">
+					<label><?php $this->_("Proxmoxv2.tab_actions.cpus");?> :</label>
+					<span ><?php echo $server['cpus'];?></span>
+				</li>
+				<li  class="highlight" >
+					<label><?php $this->_("Proxmoxv2.tab_actions.nproc");?> :</label>
+					<span ><?php echo $server['nproc'];?></span>
+				</li>					
+							
+				<li class="dark">
+					<label><?php $this->_("Proxmoxv2.tab_actions.cpu_usage");?> :</label>
+					<span class="percentage">
+						<div style="border:1px solid #ccc;width:450px;background:#fff;padding:1px;">
+							<div style="text-align:center;background:#36e22d;width:<?php echo number_format($cpusage, 2, '.', ''); ?>%;"> <?php echo number_format($cpusage, 2, '.', ''); ?>% </div>
+						</div>
+						<?php echo number_format($cpusage, 2, '.', ''); ?> % <?php $this->_("Proxmoxv2.tab_actions.of");?> <?php echo $server['cpus'];?> CPUs
+					</span>
+				</li>	
+				<li class="dark">
+					<label><?php $this->_("Proxmoxv2.tab_actions.disk_usage");?> :</label>
+					<span class="percentage">
+						<div style="border:1px solid #ccc;width:450px;background:#fff;padding:1px;">
+							<div style="text-align:center;background:#36e22d;width:<?php echo number_format($usedhdd, 2, '.', ''); ?>%;"> <?php echo number_format($usedhdd, 2, '.', ''); ?>% </div>
+						</div>
+						<?php echo bytes($server['disk']); ?> <?php $this->_("Proxmoxv2.tab_actions.of");?> <?php echo bytes($server['maxdisk']);?> <?php $this->_("Proxmoxv2.tab_actions.used");?> / <?php echo bytes($freehdd);?> <?php $this->_("Proxmoxv2.tab_actions.free");?> 
+					</span>
+				</li>	
+				<li  class="dark">
+					<label><?php $this->_("Proxmoxv2.tab_actions.mem_usage");?> :</label>
+					<span class="percentage">
+						<div style="border:1px solid #ccc;width:450px;background:#fff;padding:1px;">
+							<div style="text-align:center;background:#36e22d;width:<?php echo number_format($usedmem, 2, '.', ''); ?>%;"> <?php echo number_format($usedmem, 2, '.', ''); ?>% </div>
+						</div>
+						<?php echo bytes($server['mem']); ?> <?php $this->_("Proxmoxv2.tab_actions.of");?> <?php echo bytes($server['maxmem']);?> <?php $this->_("Proxmoxv2.tab_actions.used");?> / <?php echo bytes($freemem);?> <?php $this->_("Proxmoxv2.tab_actions.free");?> 
+					</span>
+				</li>		
+	
+			</ul>
+		</div>	
+	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" id="hostname">
+				<?php $this->Form->create(null);?>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel"><?php $this->_("Proxmoxv2.tab_actions.actions.change_hostname");?></h4>
+				</div>
+				<div class="modal-body">
+					<?php $this->Form->fieldText("hostname", $this->Html->ifSet($server['name']), array('class' => "form-control input-lg"));?>	
+					<?php $this->Form->fieldHidden("action", "hostname");?>	
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php $this->_("Proxmoxv2.button.close");?></button>
+					<button type="submit" class="btn btn-primary"><?php $this->_("Proxmoxv2.button.save");?></button>
+				</div>
+				<?php $this->Form->end();?>
+			</div>
+			<div class="modal-content" id="password">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel"><?php $this->_("Proxmoxv2.tab_actions.actions.change_password");?></h4>
+				</div>
+				<div class="modal-body">
+					<?php $this->_("Proxmoxv2.not.available_client");?>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php $this->_("Proxmoxv2.button.close");?></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$(this).blestaSetHeadTag("link", {media:"screen", type:"text/css", rel:"stylesheet", href: "<?php echo $this->Html->safe($this->view_dir . "css/styles.css");?>"});
+	
+
+	var $form_modal = $('.modal-dialog'),
+		$form_hostname = $form_modal.find('#hostname'),
+		$form_password = $form_modal.find('#password');
+
+	$(".hostname_btn").click(function() {
+		$form_modal.addClass('is-visible');
+		hostname_selected();
+	});
+	
+	$(".password_btn").click(function() {
+		$form_modal.addClass('is-visible');
+		password_selected();
+	});	
+	
+	function hostname_selected(){
+		$form_hostname.addClass('is-selected');
+		$form_password.removeClass('is-selected');
+	}
+
+	function password_selected(){
+		$form_hostname.removeClass('is-selected');
+		$form_password.addClass('is-selected');
+	}
+	
+});
+</script>	
