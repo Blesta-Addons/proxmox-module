@@ -3,8 +3,7 @@
 		$link_buttons = array(
 			array('name'=>$this->_("Proxmoxv2.return_to_manage", true), 'attributes'=>array('href'=>$this->base_uri . "settings/company/modules/manage/" . $url[count($url)-3] ."/" , 'class'=>'return' ))
 		);		
-		$this->Widget->clear();
-		$this->Widget->setStyleSheet($this->view_dir . "css/styles.css");			
+		$this->Widget->clear();	
 		$this->Widget->setLinkButtons($link_buttons);
 		$this->Widget->create($this->_("Proxmoxv2.edit_row.box_title", true));
 		?>

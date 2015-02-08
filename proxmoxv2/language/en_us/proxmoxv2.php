@@ -15,6 +15,7 @@ $lang['Proxmoxv2.!error.password_valid'] = "Please enter a Password.";
 $lang['Proxmoxv2.!error.password_valid_connection'] = "Login to Proxmox Host failed. Please check to ensure that the data are correct.";
 $lang['Proxmoxv2.!error.hostname_valid'] = "Please enter a Hostname.";
 $lang['Proxmoxv2.!error.failed_hostname'] = "Cannot resolve  %1\$s " ;
+$lang['Proxmoxv2.!error.failed_failed_port'] = "the Port %1\$s  must be between 1 and 65535. " ;
 $lang['Proxmoxv2.!error.port_valid'] = "Please enter a valid port.";
 $lang['Proxmoxv2.!error.PVE2_API_object'] = "Could not create PVE2_API object.";
 
@@ -30,10 +31,12 @@ $lang['Proxmoxv2.!error.meta[type].valid'] = "Please select a valid virtualizati
 $lang['Proxmoxv2.!error.meta[nodes].empty'] = "Please select at least one node.";
 $lang['Proxmoxv2.!error.meta[memory].format'] = "Please set RAM.";
 $lang['Proxmoxv2.!error.meta[cpu].format'] = "Please set vCPU count.";
+$lang['Proxmoxv2.!error.meta[cpuunits].format'] = "Please set CPU UNITS.";
 $lang['Proxmoxv2.!error.meta[disk].format'] = "Please set HDD size.";
 $lang['Proxmoxv2.!error.meta[netspeed].format'] = "Please set NetSpeed.";
 $lang['Proxmoxv2.!error.meta[set_template].format'] = "Please set whether to select a template or to allow clients to set a template.";
 $lang['Proxmoxv2.!error.meta[template].empty'] = "Please select a template.";
+$lang['Proxmoxv2.!error.meta[swap].format'] = "Please set SWAP.";
 
 
 $lang['Proxmoxv2.!error.Proxmoxv2_hostname.format'] = "The hostname appears to be invalid.";

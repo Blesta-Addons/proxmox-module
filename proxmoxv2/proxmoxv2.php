@@ -57,7 +57,7 @@ class Proxmoxv2 extends Module {
 	 *	 
 	 * /DONE/
 	 */
-	private function getApi($hostname,  $user,  $realm , $password ) {
+	private function getApi($hostname, $user,  $realm , $password , $port) {
 		Loader::load(dirname(__FILE__) . DS . "apis" . DS . "pve2_api.class.php");		
 		
 		# Check hostname resolves.
@@ -66,9 +66,12 @@ class Proxmoxv2 extends Module {
 			//return $pve2 ;
 		}
 		
-		$pve2 = new PVE2_API($hostname,  $user,  $realm , $password );
-	
-		
+		if ($port < 1 || $port > 65535) {
+			$this->Input->setErrors(array('proxmox' => array('checkport' => Language::_("Proxmoxv2.!error.failed_port", true , $port ))));			
+		}
+
+			
+		$pve2 = new PVE2_API($hostname, $user,  $realm , $password , (int)$port);		
 		return $pve2;
 	}
 
@@ -79,40 +82,36 @@ class Proxmoxv2 extends Module {
 	 */
 	private function SendCommand($module_row,  $command , $path , $params = null) {
 	
-		$pve2 = $this->getApi($module_row->meta->hostname, $module_row->meta->user, $module_row->meta->realm, $module_row->meta->password);
-		
+		$pve2 = $this->getApi($module_row->meta->hostname, $module_row->meta->user, $module_row->meta->realm, $module_row->meta->password, $module_row->meta->port);
+		// print_r($module_row);
 		$success = false ;
 		
-		// print_r($params);
-		if($command == "get" && isset($params) ) {
+		// if($command == "get" && isset($params) ) {
 		
-			$postfields = array();
+			// $postfields = array();
 			
-			foreach($params as $arg_name => $arg_value) {
-				$postfields[] = urlencode($arg_name) . '=' . urlencode($arg_value);
-			}
+			// foreach($params as $arg_name => $arg_value) {
+				// $postfields[] = urlencode($arg_name) . '=' . urlencode($arg_value);
+			// }
 			
-			$postfields = implode('&', $postfields);
-			$path = $path . '?' . $postfields ;
-			$params = null ;
-		}	
+			// $postfields = implode('&', $postfields);
+			// $path = $path . '?' . $postfields ;
+			// $params = null ;
+		// }	
 		
 		$this->log($module_row->meta->hostname . "|" . $command , serialize($path ) . serialize($params) , "input", true);
 		
 		try {		
-			if ($pve2->constructor_success()) {
+			// if ($pve2->constructor_success()) {
 			
-				if(isset($module_row->meta->debug))
-					$pve2->set_debug(true);
+				// if(isset($module_row->meta->debug))
+					// $pve2->set_debug(true);
 
 				if ($pve2->login()) {
 				
 					$success = true ;
 					$response = $pve2->{$command}($path , $params);
-					
-					// $this->json = json_decode($response);
-					// $this->json->status = empty($this->json->data) ? "error" : "success";
-					
+									
 					$this->log($module_row->meta->hostname, $this->Json->encode($response)  , "output", $success);
 					// print_r($response) ; 
 					return $response ;
@@ -122,11 +121,11 @@ class Proxmoxv2 extends Module {
 					$this->Input->setErrors(array('api' => array('internal' => Language::_("Proxmoxv2.!error.password_valid_connection", true))));
 					$this->log($module_row->meta->hostname, Language::_("Proxmoxv2.!error.password_valid_connection", true) , "output", $success);		
 				}
-			} else {
-				$success = false ;
-				$this->Input->setErrors(array('api' => array('internal' => Language::_("Could not create PVE2_API object", true))));
-				$this->log($module_row->meta->hostname, Language::_("Could not create PVE2_API object", true) , "output", $success);			
-			}
+			// } else {
+				// $success = false ;
+				// $this->Input->setErrors(array('api' => array('internal' => Language::_("Could not create PVE2_API object", true))));
+				// $this->log($module_row->meta->hostname, Language::_("Could not create PVE2_API object", true) , "output", $success);			
+			// }
 		}
 		catch (Exception $e) {
 			$success = false ;
@@ -183,7 +182,7 @@ class Proxmoxv2 extends Module {
 					'message'=>Language::_("Proxmoxv2.!error.password_valid", true)
 				),
 				'valid_connection'=>array(
-					'rule'=>array(array($this, "validateConnection"), $vars['hostname'] , $vars['port'] , $vars['realm'] , $vars['user'] , $vars['password'] ),
+					'rule'=>array(array($this, "validateConnection"), $vars['hostname'] , $vars['port'] , $vars['realm'] , $vars['user'] ),
 					'message'=>Language::_("Proxmoxv2.!error.password_valid_connection", true)
 				)
 			)
@@ -197,19 +196,17 @@ class Proxmoxv2 extends Module {
 	 *	 
 	 * /DONE/
 	 */
-	public function validateConnection($password,  $hostname , $port,  $realm , $user ) {
-		
+	public function validateConnection($password , $hostname , $port , $realm , $user ) {
+		// print_r($password . $hostname . $port . $user . $realm);
 		try {
 		
-			$pve2 = $this->getApi($hostname,  $user,  $realm , $password );
-			// $pve2->set_debug(true);
+			$pve2 = $this->getApi($hostname,  $user,  $realm  ,  $password ,  $port);
 			
-			if ($pve2->constructor_success()) {	
-				if ($pve2->login()) {
-					// Success Login , So give it true .
-					return true;
-				}
-			}			
+			if ($pve2->login()) {
+				// Success Login , So give it true .
+				return true;
+			}
+		
 		}
 		catch (Exception $e) {
 			// Trap any errors encountered, could not validate connection
@@ -427,7 +424,7 @@ class Proxmoxv2 extends Module {
 			'meta[cpuunits]' => array(
 				'format' => array(
 					'rule' => array("matches", "/^[0-9]+$/"),
-					'message' => Language::_("Proxmoxv2.!error.meta.numeric.format", true , "CPUUNITS" )
+					'message' => Language::_("Proxmoxv2.!error.meta[cpuunits].format", true , "CPUUNITS" )
 				)
 			),	
 			'meta[disk]' => array(
@@ -455,7 +452,7 @@ class Proxmoxv2 extends Module {
 			$rules['meta[swap]'] = array(
 				'format' => array(
 					'rule' => array("matches", "/^[0-9]+$/"),
-					'message' => Language::_("Proxmoxv2.!error.meta.numeric.format", true , "SWAP")
+					'message' => Language::_("Proxmoxv2.!error.meta[swap].format", true , "SWAP")
 				)
 			);
 		}
@@ -1509,9 +1506,9 @@ class Proxmoxv2 extends Module {
 	 *
 	 * /DONE/
 	 */
-	public function editService($package, $service, array $vars=array(), $parent_package=null, $parent_service=null) {
+	public function editService($package, $service, array $vars=null, $parent_package=null, $parent_service=null) {
 		// Load the API
-		$module_row = $this->getModuleRow();
+		$module_row = $this->getModuleRow();		
 		
 		// Validate the service-specific fields
 		$this->validateService($package, $vars, true);
@@ -1645,7 +1642,7 @@ class Proxmoxv2 extends Module {
 		$fields->setHtml("
 			<script type=\"text/javascript\">
 				$(document).ready(function() {
-				
+				/*
 					$('input[name=\"vmid\"]').prop('disabled', true);
 
 					//show it when the checkbox is clicked
@@ -1655,7 +1652,8 @@ class Proxmoxv2 extends Module {
 						} else {
 							$('input[name=\"vmid\"]').prop('disabled', false);
 						}
-					});			
+					});	
+				*/
 				});				
 			</script>
 		");
@@ -1786,7 +1784,7 @@ class Proxmoxv2 extends Module {
 		$path = "nodes/" . $service_fields->options['node'] . "/" . $service_fields->options['type'] . "/" . $service_fields->vmid . "/rrd";
 			
 		$params['timeframe'] = "day";
-		$params['cf'] = "MAX";
+		$params['cf'] = "AVERAGE";
 		
 		if (!empty($post)) {
 			$params['timeframe'] = $post['timeframe'];			
@@ -1794,7 +1792,7 @@ class Proxmoxv2 extends Module {
 		
 		// Perform actions
 		$graph_keys = array("mem,maxmem", "cpu", "netin,netout", "diskread,diskwrite");
-		foreach ($graph_keys as $value) {		
+		foreach ($graph_keys as $value) {
 			$params['ds'] = $value  ;
 			$result = $this->SendCommand($module_row , $command , $path , $params );					
 			if(empty($result)){
@@ -1990,7 +1988,7 @@ class Proxmoxv2 extends Module {
 		
 		$settings = $this->SendCommand($module_row , "get" , $path , $params);	
 		
-		$exclude_feilds = array('nameserver' , 'searchdomain' , 'ip_address' , 'digest' , 'hostname' , 'storage'  );
+		$exclude_feilds = array('nameserver' , 'searchdomain' , 'ip_address' , 'digest' , 'hostname' , 'storage' , 'ostemplate' );
 		foreach ( $exclude_feilds as $exclude ) {
 			unset($settings[$exclude]);
 		}
@@ -2030,7 +2028,7 @@ class Proxmoxv2 extends Module {
 			$this->SendCommand($module_row , "put" , $path , $params);	
 		}
 		
-		$settings = $this->SendCommand($module_row , "get" , $path );	
+		$settings = $this->SendCommand($module_row , "get" , $path , $params);	
 
 		$exclude_feilds = array('hostname' , 'disk' , 'digest' , 'storage' , 'ostemplate' , 'onboot', 'swap' ,'description' ,'quotaugidlimit' , 'cpus', 'cpuunits', 'quotatime', 'memory' );
 		foreach ( $exclude_feilds as $exclude ) {
